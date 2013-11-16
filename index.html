@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <script type="text/javascript" src="./js/main.js"></script>
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/jquery.sortable.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/main.css"></link>
+  </head>
+  <body onload="main()">
+		<ul id="sortable-with-handles" class="sortable list">
+		</ul>
+<script>
+  $('.sortable').sortable({
+    handle: 'span',
+  });
+</script>
+  </body>
+</html>
