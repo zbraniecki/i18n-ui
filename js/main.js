@@ -43,6 +43,32 @@ var locales = {
   'zh': {'source_name': '中文', 'code': 'zh'},
 };
 
+var l10n_names = {
+  'en-US': {
+    'ar': 'Arabic',
+    'cs': 'Czech',
+    'de': 'German',
+    'el': 'Greek',
+    'en': 'English',
+    'es': 'Spanish',
+    'fa': 'Persian',
+    'fr': 'French',
+    'hu': 'Hungarian',
+    'hy': 'Armenian',
+    'it': 'Italian',
+    'ja': 'Japanese',
+    'ko': 'Korean',
+    'pl': 'Polish',
+    'ru': 'Russian',
+    'sr-SR': 'Serbian',
+    'sr-Cyrl': 'Serbian',
+    'te': 'Telugu',
+    'th': 'Thai',
+    'ur': 'Urdu',
+    'zh': 'Chinese',
+  }
+}
+
 var filter = "";
 
 function toggleSelected(e) {
@@ -160,10 +186,24 @@ function drawLocales(rootNode, locales, index) {
     }
 
     if (filter) {
-      if (
-          !locale.source_name.toLowerCase().startsWith(filter.toLowerCase()) &&
-          !locale.code.toLowerCase().startsWith(filter.toLowerCase())
-          ) {
+      var fil = filter.toLowerCase();
+      var match = false;
+
+      var source_name = locale.source_name.toLowerCase();
+      if (source_name.startsWith(fil)) {
+        match = true;
+      }
+
+      var code = locale.code.toLowerCase();
+      if (code.startsWith(fil)) {
+        match = true;
+      }
+
+      var l10n_name = l10n_names['en-US'][locale.code];
+      if (l10n_name && l10n_name.toLowerCase().startsWith(fil)) {
+        match = true;
+      }
+      if (!match) {
         continue;
       }
     }
