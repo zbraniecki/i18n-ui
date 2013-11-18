@@ -3,31 +3,47 @@ var selected_locales = [
 ];
 
 var locales = {
-  'cs': {'source_name': 'Czech', 'code': 'cs'},
-  'en': {'source_name': 'English', 'code': 'en'},
-  'fr': {
-    'source_name': 'French',
-    'code': 'fr',
-    'sub': {
-      'fr-BE': {'source_name': 'French (Belgium)', 'code': 'fr-BE'},
-      'fr-CA': {'source_name': 'French (Canada)', 'code': 'fr-CA'},
-      'fr-FR': {'source_name': 'French (France)', 'code': 'fr-FR'},
-      'fr-CH': {'source_name': 'French (Switzerland)', 'code': 'fr-CH'},
-    }
-  },
+  'ar': {'source_name': 'العربية', 'code': 'ar'},
+  'cs': {'source_name': 'čeština', 'code': 'cs'},
+  'da': {'source_name': 'Dansk', 'code': 'da'},
   'de': {
-    'source_name': 'German',
+    'source_name': 'Deutsch',
     'code': 'de',
     'sub': {
-      'de-CH': {'source_name': 'German (Switzerland)', 'code': 'de-CH'},
-      'de-DE': {'source_name': 'German (Germany)', 'code': 'de-DE'},
+      'de-CH': {'source_name': 'Deutsch (Swiss)', 'code': 'de-CH'},
+      'de-DE': {'source_name': 'Deutsch (Deutschland)', 'code': 'de-DE'},
     }
   },
-  'hu': {'source_name': 'Hungarian', 'code': 'hu'},
-  'it': {'source_name': 'Italian', 'code': 'it'},
-  'pl': {'source_name': 'Polish', 'code': 'pl'},
-  'es': {'source_name': 'Spanish', 'code': 'es'},
+  'el': {'source_name': 'Ελληνικά', 'code': 'el'},
+  'en': {'source_name': 'English', 'code': 'en'},
+  'es': {'source_name': 'Español', 'code': 'es'},
+  'fa': {'source_name': 'فارسی', 'code': 'fa'},
+  'fr': {
+    'source_name': 'français',
+    'code': 'fr',
+    'sub': {
+      'fr-BE': {'source_name': 'français (Belgique)', 'code': 'fr-BE'},
+      'fr-CA': {'source_name': 'français (Canadien)', 'code': 'fr-CA'},
+      'fr-FR': {'source_name': 'français (France)', 'code': 'fr-FR'},
+      'fr-CH': {'source_name': 'français (Swiss)', 'code': 'fr-CH'},
+    }
+  },
+  'hu': {'source_name': 'Magyar', 'code': 'hu'},
+  'hy': {'source_name': 'Հայերեն', 'code': 'hy'},
+  'it': {'source_name': 'italiano', 'code': 'it'},
+  'ja': {'source_name': '日本語', 'code': 'ja'},
+  'ko': {'source_name': '한국어', 'code': 'ko'},
+  'pl': {'source_name': 'polski', 'code': 'pl'},
+  'ru': {'source_name': 'Pyccĸий', 'code': 'ru'},
+  'sr-SR': {'source_name': 'Srpski', 'code': 'sr-SR'},
+  'sr-Cyrl': {'source_name': 'Српски', 'code': 'sr-Cyrl'},
+  'te': {'source_name': 'తెలుగు', 'code': 'te'},
+  'th': {'source_name': 'ภาษาไทย', 'code': 'th'},
+  'ur': {'source_name': 'اردو', 'code': 'ur'},
+  'zh': {'source_name': '中文', 'code': 'zh'},
 };
+
+var filter = "";
 
 function toggleSelected(e) {
   var elem = e.target;
@@ -40,6 +56,14 @@ function toggleSelected(e) {
     selected_locales.push(code);
   }
   drawList();
+}
+
+function onSearch(e) {
+  var elem = e.target;
+  var val = elem.value;
+
+  filter = val;
+  drawAvailableList();
 }
 
 function findLocale(code, root) {
@@ -116,6 +140,14 @@ function buildDesc(desc) {
   li.classList.add('desc');
   li.textContent = desc;
 
+  if (desc === 'available:') {
+    var search = document.createElement('input');
+    search.setAttribute('type', 'text');
+    search.classList.add('search');
+    search.addEventListener('keyup', onSearch);
+    li.appendChild(search);
+  }
+
   return li;
 }
 
@@ -125,6 +157,15 @@ function drawLocales(rootNode, locales, index) {
 
     if (selected_locales.indexOf(locale.code) !== -1) {
       continue;
+    }
+
+    if (filter) {
+      if (
+          !locale.source_name.toLowerCase().startsWith(filter.toLowerCase()) &&
+          !locale.code.toLowerCase().startsWith(filter.toLowerCase())
+          ) {
+        continue;
+      }
     }
 
     var li = buildRow(locale, false, index);
@@ -162,6 +203,16 @@ function drawList() {
     handle: 'span',
     items: '.selected',
   });
+}
+
+function drawAvailableList() {
+  var rootNode = document.getElementById('sortable-with-handles');
+
+  while (rootNode.lastChild &&
+         rootNode.lastChild.classList.contains('desc') === false) {
+    rootNode.removeChild(rootNode.lastChild);
+  }
+  drawLocales(rootNode, locales, 0);
 }
 
 function main() {
