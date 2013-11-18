@@ -5,7 +5,7 @@ body {
 #view {
   width: 300px;
   border: 3px solid #444;
-  height: 99%;
+  height: 80%;
   overflow: scroll;
   margin: auto;
   margin-top: 50px;
