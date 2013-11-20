@@ -71,6 +71,23 @@ var l10n_names = {
 
 var filter = "";
 
+function updateSelectedLocales() {
+  var rootNode = document.getElementById('sortable-with-handles');
+
+  var childNodes = rootNode.childNodes;
+
+  var new_selected_locales = [];
+
+  for (var i = 0; i < childNodes.length; i++) {
+    if (childNodes[i].classList.contains('selected')) {
+      new_selected_locales.push(childNodes[i].dataset.code);
+    }
+  }
+
+  selected_locales = new_selected_locales;
+  console.dir(selected_locales);
+}
+
 function toggleSelected(e) {
   var elem = e.target;
   var code = elem.parentNode.dataset.code; 
@@ -257,4 +274,8 @@ function drawAvailableList() {
 
 function main() {
   drawList();
+
+  $('.sortable').sortable({
+    handle: 'span',
+  }).bind('sortupdate', updateSelectedLocales);
 }
